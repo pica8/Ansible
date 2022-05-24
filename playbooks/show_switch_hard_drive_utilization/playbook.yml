@@ -1,0 +1,9 @@
+---
+- name: Shows hard drive utilization of all switches 
+  hosts: all
+  tasks:
+  - name: Shows hard drive utilization of all switches 
+    picos_config: mode='shell' cmd='df -h'
+    register: exec_result
+  - name: Show execution result
+    debug: var=exec_result.stdout_lines  

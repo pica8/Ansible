@@ -1,0 +1,29 @@
+---
+- name: Disable dropping packets from specific Source IP
+  hosts: all
+  tasks:
+  - name: Delete the previously added port 2 
+    picos_config: mode='shell' cmd='/ovs/bin/ovs-vsctl del-port br0 ge-1/1/2'
+    register: exec_result
+  - name: Show execution result
+    debug: var=exec_result.stdout_lines
+
+  - name: Delete the flow 
+    picos_config: mode='shell' cmd='/ovs/bin/ovs-ofctl del-flows br0'
+    register: exec_result
+  - name: Show execution result
+    debug: var=exec_result.stdout_lines
+
+  - name: Delete the bridge 
+    picos_config: mode='shell' cmd='/ovs/bin/ovs-vsctl del-br br0'
+    register: exec_result
+  - name: Show execution result
+    debug: var=exec_result.stdout_lines
+
+  - name: Transfer the script that disable Crossflow on Port 2 
+    copy: src=disable_crossflow_port2.conf dest=/home/admin/disable_crossflow_port2.conf force=yes mode=0777
+  - name: Activate the configuration to enable the Crossflow
+    picos_config: mode='config_load' cmd='/home/admin/disable_crossflow_port2.conf'
+    register: exec_result
+  - name: Show execution result
+    debug: var=exec_result.stdout_lines

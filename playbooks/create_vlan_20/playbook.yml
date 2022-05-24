@@ -1,0 +1,27 @@
+---
+- name: Deploy services
+  hosts: all
+  tasks:
+  - name: Transfer the script
+    copy: src=vlan20.conf dest=/home/admin/vlan20.conf force=yes mode=0777
+
+  - name: Activate the configuration
+    picos_config: mode='config_load' cmd='/home/admin/vlan20.conf'
+    register: exec_result
+
+  - name: Show execution result
+    debug: var=exec_result.stdout_lines
+
+  - name: Set Vlan 20 IP 
+    picos_config: mode='cli_config' cmd='set vlan-interface interface vif20 vif vif20 address {{Vlan20IP}} prefix-length 24'
+    register: exec_result
+
+  - name: Show execution result
+    debug: var=exec_result.stdout_lines
+
+  - name: Set vlan 24 on te-1/1/1 
+    picos_config: mode='cli_config' cmd='set interface gigabit-ethernet te-1/1/1 family ethernet-switching native-vlan-id 20'
+    register: exec_result
+
+  - name: Show execution result
+    debug: var=exec_result.stdout_lines

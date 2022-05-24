@@ -1,0 +1,9 @@
+---
+- name: Show Linux version 
+  hosts: all
+  tasks:
+  - name: Show license info of switches 
+    picos_config: mode='shell' cmd='awk -F= "/^PRETTY_NAME/{print $2}" /etc/os-release'
+    register: exec_result
+  - name: Show execution result
+    debug: var=exec_result.stdout_lines 

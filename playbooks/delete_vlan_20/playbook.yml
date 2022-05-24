@@ -1,0 +1,13 @@
+---
+- name: Deploy services
+  hosts: all
+  tasks:
+  - name: Transfer the script
+    copy: src=delete_vlan20.conf dest=/home/admin/delete_vlan20.conf force=yes mode=0777
+
+  - name: Activate the configuration
+    picos_config: mode='config_load' cmd='/home/admin/delete_vlan20.conf'
+    register: exec_result
+
+  - name: Show execution result
+    debug: var=exec_result.stdout_lines

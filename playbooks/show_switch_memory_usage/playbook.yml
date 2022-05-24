@@ -1,0 +1,11 @@
+---
+- name: Show memory usage of all switches 
+  hosts: all
+  tasks:
+  - name: Show memory usage of all switches 
+    picos_config: mode='shell' cmd='free -m'
+    register: exec_result
+  - name: Show execution result
+    debug: var=exec_result.stdout_lines
+  - name: Show user name who launched this playbook
+    debug: var=tower_user_name

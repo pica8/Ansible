@@ -1,0 +1,6 @@
+---
+- name: Test connectivity of  all switches and sanity test of Ansible AWX 
+  hosts: all
+  tasks:
+  - name: Ping all switches 
+    ping: 
